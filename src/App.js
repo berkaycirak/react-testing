@@ -34,6 +34,7 @@ function App() {
 				<button onClick={onIncrement}>Increment</button>
 				<button onClick={onDecrement}>Decrement</button>
 			</div>
+			<h1>I am Berkay</h1>
 		</div>
 	);
 }

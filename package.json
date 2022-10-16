@@ -15,7 +15,7 @@
 	"scripts": {
 		"start": "react-scripts start",
 		"build": "react-scripts build",
-		"test": "mocha"
+		"test": "react-scripts test"
 	},
 	"eslintConfig": {
 		"extends": [
