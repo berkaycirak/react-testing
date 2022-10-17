@@ -2,6 +2,7 @@ import Koa from 'koa';
 import KoaRouter from 'koa-router';
 import json from 'koa-json';
 import bodyParser from 'koa-bodyparser';
+import cors from '@koa/cors';
 
 const app = new Koa();
 const router = new KoaRouter();
@@ -27,13 +28,15 @@ const data = [
 // json helps to make better visual appearance like indented curly brackets or etc.
 app.use(json());
 app.use(bodyParser());
+// cors(cross origin resource sharing) for fetch data from local
+app.use(cors());
 
 // Read
 router.get('/', (ctx) => (ctx.body = data));
 // Add
 router.post('/add', (ctx) => {
 	const userInput = ctx.request.body;
-
+	data.push(userInput);
 	ctx.body = userInput;
 });
 // Update

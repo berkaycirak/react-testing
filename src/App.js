@@ -1,50 +1,50 @@
-import { useState } from 'react';
-
-// Since setState is async, you should declare a function explicitly to pass into setState. Otherwise, we can't test it sync since it is async. Also you should export those functions to import into the test file. That is the isolation process for real unit test.
-export const doDecrement = (prevState) => {
-	return prevState - 1;
-};
-
-export const doIncrement = (prevState) => {
-	return prevState + 1;
-};
-
+import axios from 'axios';
+import { useEffect, useRef, useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 function App() {
-	const [count, setCount] = useState(0);
+	const [users, setUsers] = useState([]);
+	const [listenCount, setListenCount] = useState(0);
+	const nameRef = useRef();
 
-	class Person {
-		constructor() {
-			this.name = 'Berkay';
-			this.surname = 'CRK';
-		}
-	}
+	useEffect(() => {
+		const fetchData = async () => {
+			const data = await axios.get('http://localhost:3000/');
+			setUsers(data.data);
+		};
 
-	const person1 = new Person();
-	console.log(person1.name);
-	const style = {
-		border: '3px solid black',
-		margin: '10px',
-		width: '30px',
-		fontSize: '24px',
-		borderRadius: '5px',
-		padding: '2px',
+		fetchData();
+	}, [listenCount]);
+
+	//Handle Submit
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+		await axios.post('http://localhost:3000/add', {
+			id: uuidv4(),
+			name: nameRef.current?.value,
+		});
+		nameRef.current.value = '';
+		setListenCount((prev) => prev + 1);
 	};
 
-	const onDecrement = () => {
-		setCount(doDecrement);
-	};
-	const onIncrement = () => {
-		setCount(doIncrement);
-	};
+	//
 
 	return (
 		<div className='App'>
-			<div style={style}>{count}</div>
 			<div>
-				<button onClick={onIncrement}>Increment</button>
-				<button onClick={onDecrement}>Decrement</button>
+				{users.map((user) => (
+					<h1 key={user.id}>{user.name}</h1>
+				))}
 			</div>
-			<h1>I am Berkay</h1>
+			<div>
+				<form onSubmit={handleSubmit}>
+					<input
+						type='text'
+						placeholder='Enter a name'
+						ref={nameRef}
+					/>
+					<button type='submit'>Send</button>
+				</form>
+			</div>
 		</div>
 	);
 }
