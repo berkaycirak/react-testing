@@ -11,6 +11,16 @@ export const doIncrement = (prevState) => {
 
 function App() {
 	const [count, setCount] = useState(0);
+
+	class Person {
+		constructor() {
+			this.name = 'Berkay';
+			this.surname = 'CRK';
+		}
+	}
+
+	const person1 = new Person();
+	console.log(person1.name);
 	const style = {
 		border: '3px solid black',
 		margin: '10px',
