@@ -1,7 +1,13 @@
-import { render, screen } from '@testing-library/react';
+import {
+	fireEvent,
+	render,
+	screen,
+	waitFor,
+} from '@testing-library/react';
 import { setupServer } from 'msw/node';
 import { rest } from 'msw';
 import App from './App';
+import userEvent from '@testing-library/user-event';
 
 // Mock server setup via msw
 const server = setupServer(
@@ -35,4 +41,14 @@ test('fetch user names', async () => {
 	render(<App />);
 	const user = await screen.findByText('Berkay');
 	expect(user).toBeInTheDocument();
+});
+
+test('post a name', async () => {
+	render(<App />);
+	userEvent.type(screen.getByPlaceholderText('Name'), 'Rebecca');
+	userEvent.click(screen.getByRole('button'));
+
+	await waitFor(() =>
+		expect(screen.getByTestId('msg')).toHaveTextContent('User added.')
+	);
 });

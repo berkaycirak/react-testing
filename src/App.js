@@ -28,7 +28,7 @@ function App() {
 		});
 		const info = await res.data;
 		setMsg(info);
-		nameRef.current.value = '';
+
 		setListenCount((prev) => prev + 1);
 	};
 
@@ -51,15 +51,17 @@ function App() {
 			<div>
 				<form onSubmit={handleSubmit}>
 					<input
+						data-testid='input'
 						type='text'
-						placeholder='Enter a name'
+						placeholder='Name'
 						ref={nameRef}
 					/>
 					<button type='submit'>Add</button>
 				</form>
 			</div>
+
 			<div>
-				<h5 data-testid='msg'>{msg}</h5>
+				{nameRef.current?.value && <h5 data-testid='msg'>{msg}</h5>}
 			</div>
 		</div>
 	);
