@@ -1,8 +1,38 @@
 import { render, screen } from '@testing-library/react';
+import { setupServer } from 'msw/node';
+import { rest } from 'msw';
 import App from './App';
 
-test('name renders correctly', () => {
+// Mock server setup via msw
+const server = setupServer(
+	rest.get('http://localhost:8080/', (req, res, ctx) => {
+		return res(
+			ctx.status(200),
+			ctx.json([
+				{
+					id: 1,
+					name: 'Berkay',
+				},
+			])
+		);
+	}),
+	rest.post('http://localhost:8080/add', (req, res, ctx) => {
+		return res(ctx.status(200), ctx.json('User added.'));
+	})
+);
+
+beforeAll(() => server.listen());
+afterAll(() => server.close());
+afterEach(() => server.resetHandlers());
+
+test('correctly renders title', () => {
 	render(<App />);
-	const buttonEl = screen.getAllByRole('button');
-	expect(buttonEl).toHaveLength(2);
+	const titleEl = screen.getByTestId('title');
+	expect(titleEl).toBeInTheDocument();
+});
+
+test('fetch user names', async () => {
+	render(<App />);
+	const user = await screen.findByText('Berkay');
+	expect(user).toBeInTheDocument();
 });

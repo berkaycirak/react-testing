@@ -7,23 +7,7 @@ import cors from '@koa/cors';
 const app = new Koa();
 const router = new KoaRouter();
 
-const data = [
-	{
-		id: 1,
-		name: 'John',
-		surname: 'Emmet',
-	},
-	{
-		id: 2,
-		name: 'Johnie',
-		surname: 'Telle',
-	},
-	{
-		id: 3,
-		name: 'Henry',
-		surname: 'Russel',
-	},
-];
+const data = [];
 
 // json helps to make better visual appearance like indented curly brackets or etc.
 app.use(json());
@@ -37,7 +21,7 @@ router.get('/', (ctx) => (ctx.body = data));
 router.post('/add', (ctx) => {
 	const userInput = ctx.request.body;
 	data.push(userInput);
-	ctx.body = userInput;
+	ctx.body = 'User added';
 });
 // Update
 router.put('/update', (ctx) => {
@@ -72,4 +56,6 @@ router.delete('/delete', (ctx) => {
 app.use(router.routes()).use(router.allowedMethods());
 
 // Server is listening port 3000.
-app.listen(3000, () => console.log('Server Started...'));
+export const server = app.listen(8080, () =>
+	console.log('Server Started...')
+);

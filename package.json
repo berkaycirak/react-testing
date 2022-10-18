@@ -22,7 +22,7 @@
 	"scripts": {
 		"start": "react-scripts start",
 		"build": "react-scripts build",
-		"test": "react-scripts test",
+		"test": "react-scripts test --transformIgnorePatterns \"node_modules/(?!axios)/\"",
 		"devStart": "nodemon server/server.js"
 	},
 	"eslintConfig": {
@@ -44,6 +44,9 @@
 		]
 	},
 	"devDependencies": {
-		"nodemon": "^2.0.20"
+		"msw": "^0.47.4",
+		"nodemon": "^2.0.20",
+		"react-test-renderer": "^18.2.0",
+		"supertest": "^6.3.0"
 	}
 }
