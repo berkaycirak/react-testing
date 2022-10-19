@@ -1,9 +1,4 @@
-import {
-	fireEvent,
-	render,
-	screen,
-	waitFor,
-} from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { setupServer } from 'msw/node';
 import { rest } from 'msw';
 import App from './App';
@@ -31,24 +26,29 @@ beforeAll(() => server.listen());
 afterAll(() => server.close());
 afterEach(() => server.resetHandlers());
 
-test('correctly renders title', () => {
-	render(<App />);
-	const titleEl = screen.getByTestId('title');
-	expect(titleEl).toBeInTheDocument();
-});
+// "describe" is a test suite including test cases.
+describe('Fetching application tests', () => {
+	test('correctly renders title', () => {
+		render(<App />);
+		const titleEl = screen.getByTestId('title');
+		expect(titleEl).toBeInTheDocument();
+	});
 
-test('fetch user names', async () => {
-	render(<App />);
-	const user = await screen.findByText('Berkay');
-	expect(user).toBeInTheDocument();
-});
+	test('fetch user names', async () => {
+		render(<App />);
+		const user = await screen.findByText('Berkay');
+		expect(user).toBeInTheDocument();
+	});
 
-test('post a name', async () => {
-	render(<App />);
-	userEvent.type(screen.getByPlaceholderText('Name'), 'Rebecca');
-	userEvent.click(screen.getByRole('button'));
+	test('post a name', async () => {
+		render(<App />);
+		userEvent.type(screen.getByPlaceholderText('Name'), 'Rebecca');
+		userEvent.click(screen.getByRole('button'));
 
-	await waitFor(() =>
-		expect(screen.getByTestId('msg')).toHaveTextContent('User added.')
-	);
+		await waitFor(() =>
+			expect(screen.getByTestId('msg')).toHaveTextContent(
+				'User added.'
+			)
+		);
+	});
 });
