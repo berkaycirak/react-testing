@@ -44,7 +44,6 @@ describe('Fetching application tests', () => {
 		render(<App />);
 		userEvent.type(screen.getByPlaceholderText('Name'), 'Rebecca');
 		userEvent.click(screen.getByRole('button'));
-
 		await waitFor(() =>
 			expect(screen.getByTestId('msg')).toHaveTextContent(
 				'User added.'
