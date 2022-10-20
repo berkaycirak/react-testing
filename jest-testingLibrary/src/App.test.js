@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import { setupServer } from 'msw/node';
 import { rest } from 'msw';
-import App from '../src/App';
+import App from './App';
 import userEvent from '@testing-library/user-event';
 
 // Mock server setup via msw
