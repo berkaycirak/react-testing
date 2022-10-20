@@ -16,7 +16,9 @@ app.use(bodyParser());
 app.use(cors());
 
 // Read
-router.get('/', (ctx) => (ctx.body = data));
+router.get('/', (ctx) => {
+	ctx.body = data;
+});
 // Add
 router.post('/add', (ctx) => {
 	const userInput = ctx.request.body;
