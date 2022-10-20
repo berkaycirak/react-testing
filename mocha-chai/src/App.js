@@ -2,23 +2,6 @@ import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-export class Cube {
-	constructor(length) {
-		this.length = length;
-	}
-	getSideLength() {
-		return this.length;
-	}
-
-	getSurfaceArea() {
-		return this.length * this.length * 6;
-	}
-
-	getVolume() {
-		return Math.pow(this.length, 3);
-	}
-}
-
 function App() {
 	const [users, setUsers] = useState([]);
 	const [msg, setMsg] = useState();
