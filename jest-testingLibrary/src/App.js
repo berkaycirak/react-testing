@@ -1,6 +1,10 @@
 import axios from 'axios';
+import io from 'socket.io-client';
 import { useEffect, useRef, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+
+const socket = io.connect('http://localhost:8080');
+
 function App() {
 	const [users, setUsers] = useState([]);
 	const [msg, setMsg] = useState();
@@ -8,26 +12,22 @@ function App() {
 	const nameRef = useRef();
 
 	useEffect(() => {
-		const fetchData = async () => {
-			const data = await axios.get('http://localhost:8080/');
-			setUsers(data.data);
-		};
+		socket.on('receive_data', (data) => {
+			setUsers([...users, data]);
+		});
+	}, [listenCount]);
 
-		fetchData();
-		setTimeout(() => {
-			setMsg('');
-		}, 2000);
-	}, [listenCount, msg]);
-
+	console.log(users);
 	//Handle Submit
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		const res = await axios.post('http://localhost:8080/add', {
-			id: uuidv4(),
-			name: nameRef.current?.value,
-		});
-		const info = await res.data;
-		setMsg(info);
+		socket.emit('submit', { name: nameRef.current?.value });
+		// const res = await axios.post('http://localhost:8080/add', {
+		// 	id: uuidv4(),
+		// 	name: nameRef.current?.value,
+		// });
+		// const info = await res.data;
+		// setMsg(info);
 
 		setListenCount((prev) => prev + 1);
 	};
