@@ -13,7 +13,6 @@ let cache = [];
 const io = new Server(httpServer, {
 	cors: {
 		origin: 'http://localhost:3000',
-		method: ['GET', 'POST'],
 	},
 });
 
