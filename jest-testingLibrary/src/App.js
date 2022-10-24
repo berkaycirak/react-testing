@@ -13,9 +13,9 @@ function App() {
 
 	useEffect(() => {
 		socket.on('receive_data', (data) => {
-			setUsers([...users, data]);
+			setUsers(data);
 		});
-	}, [listenCount]);
+	}, [listenCount, socket]);
 
 	console.log(users);
 	//Handle Submit
