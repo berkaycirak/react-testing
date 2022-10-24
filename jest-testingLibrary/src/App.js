@@ -28,7 +28,7 @@ function App() {
 		// });
 		// const info = await res.data;
 		// setMsg(info);
-
+		nameRef.current.value = '';
 		setListenCount((prev) => prev + 1);
 	};
 

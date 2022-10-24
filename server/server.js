@@ -75,6 +75,7 @@ io.on('connection', (socket) => {
 	console.log(`User Connected: ${socket.id}`);
 	socket.on('submit', (data) => {
 		socket.emit('receive_data', data);
+		console.log(data);
 	});
 });
 
