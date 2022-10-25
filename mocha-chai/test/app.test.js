@@ -1,39 +1,45 @@
-/* eslint-disable jest/valid-expect */
-import chai from 'chai';
-import { expect } from 'chai';
-import { it } from 'mocha';
-import chaiHttp from 'chai-http';
-import { server } from '../../server/server.js';
+import { createServer } from 'http';
+import { io as Client } from 'socket.io-client';
+import { Server } from 'socket.io';
+import { assert } from 'chai';
+import { before, after } from 'mocha';
 
-process.env.NODE_ENV = 'test';
+describe('my awesome project', () => {
+	let io, serverSocket, clientSocket;
 
-chai.use(chaiHttp);
-
-// // Test the GET Request
-
-describe('/GET users', () => {
-	it('fetch users', (done) => {
-		chai
-			.request(server)
-			.get('/')
-			.end((err, res) => {
-				expect(res.status).to.be.eq(200);
+	before((done) => {
+		const httpServer = createServer();
+		io = new Server(httpServer);
+		httpServer.listen(() => {
+			const port = httpServer.address().port;
+			clientSocket = new Client(`http://localhost:${port}`);
+			io.on('connection', (socket) => {
+				serverSocket = socket;
 			});
-		done();
+			clientSocket.on('connect', done);
+		});
 	});
-});
 
-describe('/POST user', () => {
-	let name = 'Uncle Sam';
-	it('post a user by entering name', (done) => {
-		chai
-			.request(server)
-			.post('/add')
-			.send(name)
-			.end((err, res) => {
-				console.log(res.body);
-				expect(res.status).to.be.eq(200);
-			});
-		done();
+	after(() => {
+		io.close();
+		clientSocket.close();
+	});
+
+	it('should work', (done) => {
+		clientSocket.on('hello', (arg) => {
+			assert.equal(arg, 'world');
+			done();
+		});
+		serverSocket.emit('hello', 'world');
+	});
+
+	it('should work (with ack)', (done) => {
+		serverSocket.on('hi', (cb) => {
+			cb('hola');
+		});
+		clientSocket.emit('hi', (arg) => {
+			assert.equal(arg, 'hola');
+			done();
+		});
 	});
 });
