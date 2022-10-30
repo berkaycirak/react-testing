@@ -1,14 +1,12 @@
-import axios from 'axios';
 import io from 'socket.io-client';
 import { useEffect, useRef, useState } from 'react';
-import { v4 as uuidv4 } from 'uuid';
 
 const socket = io.connect('http://localhost:8080');
 
 function App() {
 	const [users, setUsers] = useState([]);
-	const [msg, setMsg] = useState();
 	const [listenCount, setListenCount] = useState(0);
+	const [message, setMessage] = useState('');
 	const nameRef = useRef();
 
 	useEffect(() => {
@@ -22,15 +20,16 @@ function App() {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		socket.emit('submit', { name: nameRef.current?.value });
-		// const res = await axios.post('http://localhost:8080/add', {
-		// 	id: uuidv4(),
-		// 	name: nameRef.current?.value,
-		// });
-		// const info = await res.data;
-		// setMsg(info);
+		setMessage('User added.');
 		nameRef.current.value = '';
 		setListenCount((prev) => prev + 1);
 	};
+
+	useEffect(() => {
+		setTimeout(() => {
+			setMessage('');
+		}, 2000);
+	}, [message]);
 
 	return (
 		<div className='App'>
@@ -55,11 +54,8 @@ function App() {
 						ref={nameRef}
 					/>
 					<button type='submit'>Add</button>
+					<h1 data-testid='msg'>{message}</h1>
 				</form>
-			</div>
-
-			<div>
-				{nameRef.current?.value && <h5 data-testid='msg'>{msg}</h5>}
 			</div>
 		</div>
 	);
