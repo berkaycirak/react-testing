@@ -2,10 +2,12 @@
 	"testEnvironment": "jest-bench/environment",
 	"testEnvironmentOptions": {
 		"testEnvironment": "jest-environment-node",
+
 		"testEnvironmentOptions": {}
 	},
 
 	"reporters": ["default", "jest-bench/reporter"],
+	"typeAcquisition": { "include": ["jest"] },
 
 	"testRegex": "(/__benchmarks__/.*|\\.bench)\\.(ts|tsx|js)$"
 }
